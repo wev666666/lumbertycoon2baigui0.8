@@ -1579,11 +1579,135 @@ E6.BorderSizePixel = 0
 E6.Position = UDim2.new(0.679824531, 0, 0.0414746478, 0)
 E6.Size = UDim2.new(0.320175439, 0, 0.152073696, 0)
 E6.Font = Enum.Font.SourceSans
-E6.Text = ""
+E6.Text = "飞车"
 E6.TextColor3 = Color3.fromRGB(0, 0, 0)
 E6.TextSize = 14.000
 E6.MouseButton1Down:Connect(function()
-local a={}local b=game:GetService'Players'.LocalPlayer;local c='Generic'local d=nil;local e=game:GetService('ReplicatedStorage').Purchasables.Tools.AllTools;local f=b:GetMouse()a.notify=function(g,h,i)game.StarterGui:SetCore('SendNotification',{Title=g,Text=h,Duration=i})end;a.Teleport=function(j)repeat wait()until b.Character:FindFirstChild('HumanoidRootPart')if b.Character.Humanoid.Sit then b.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(j*CFrame.Angles(math.rad(b.Character.Humanoid.SeatPart.Parent.PrimaryPart.Orientation.X),math.rad(b.Character.Humanoid.SeatPart.Parent.PrimaryPart.Orientation.Y),math.rad(b.Character.Humanoid.SeatPart.Parent.PrimaryPart.Orientation.Z)))elseif not b.Character.Humanoid.Sit then b.Character:SetPrimaryPartCFrame(j)end end;a.getBestAxe=function()local k;local l={}local m;local n=0;local o;for p,q in pairs(b.Backpack:children())do table.insert(l,q)end;for p,q in pairs(b.Character:children())do if q:IsA'Tool'then table.insert(l,q)end end;for p,q in next,l do if q:FindFirstChild'ToolName'and e:FindFirstChild(tostring(q.ToolName.Value))then stats=require(e:FindFirstChild(tostring(q.ToolName.Value)).AxeClass).new()if stats.SpecialTrees then if stats.SpecialTrees[c]then o=stats.SpecialTrees[c].Damage;m=q;return m end end;o=stats.Damage;if o>n then n=o;m=q end end end;return m end;a.GetHitPoint=function(r)local e=e[r]local s=require(e.AxeClass).new()local t=s.Damage;if s.SpecialTrees then if s.SpecialTrees[c]then t=s.SpecialTrees[c].Damage end end;return t end;a.chopTree=function(u)d=game:GetService('ReplicatedStorage').Interaction.RemoteProxy:FireServer(u,{['tool']=a.getBestAxe(),['faceVector']=Vector3.new(1,0,0),['height']=.32,['sectionId']=1,['hitPoints']=a.GetHitPoint(a.getBestAxe().ToolName.Value),['cooldown']=-14,['cuttingClass']='Axe'})end;local v,w;a.modWood=function(log,sawmill)local x=1;local y=b.Character.HumanoidRootPart.CFrame;for z,q in next,log:children()do if q.Name=='WoodSection'and q:FindFirstChild('ID')then if q.ID.Value>=x then smallestWoodSection=q end end end;for z,q in pairs(log:GetChildren())do if q.Name=='WoodSection'then if q.ID.Value==smallestWoodSection.ParentID.Value then smallestWoodSection2=q;break end end end;local A=c;pcall(function()c=log.TreeClass.Value end)if not smallestWoodSection or not smallestWoodSection2 then a.notify('Error','Mod wood failed.',4)return end;a.Teleport(CFrame.new(smallestWoodSection.CFrame.p+Vector3.new(2,4,2)))v=smallestWoodSection2.AncestryChanged:Connect(function()for z=1,10 do game.ReplicatedStorage.Interaction.ClientIsDragging:FireServer(log)smallestWoodSection.CFrame=sawmill.Particles.CFrame;game:GetService'RunService'.Stepped:Wait()end;if w then w:Disconnect()w=nil end end)logConnection=workspace.LogModels.ChildAdded:Connect(function(B)local C=B:WaitForChild('Owner')if tostring(C.Value)==tostring(b)then logConnection:Disconnect()logConnection=nil end end)local D=workspace['Region_Volcano'].Lava.Lava;repeat game:GetService'RunService'.Stepped:Wait()game.ReplicatedStorage.Interaction.ClientIsDragging:FireServer(log)print(smallestWoodSection2)print(D)firetouchinterest(smallestWoodSection2,D,0)firetouchinterest(smallestWoodSection2,D,1)until smallestWoodSection2:FindFirstChild('LavaFire')smallestWoodSection2:FindFirstChild('LavaFire'):Destroy()for z=1,12 do game.ReplicatedStorage.Interaction.ClientIsDragging:FireServer(log)smallestWoodSection2.CFrame=CFrame.new(315,-0,79)game:GetService'RunService'.Heartbeat:wait()end;repeat game:GetService'RunService'.Stepped:Wait()until not w;a.Teleport(CFrame.new(smallestWoodSection.CFrame.p))repeat game:GetService'RunService'.Stepped:wait()game.ReplicatedStorage.Interaction.ClientIsDragging:FireServer(log)smallestWoodSection.CFrame=sawmill.Particles.CFrame;a.chopTree(log.CutEvent)until not logConnection;if v then v:Disconnect()v=nil end;if w then w:Disconnect()w=nil end;c=A end;local E,F,v;a.notify('Ancestor','选择一颗树和一个剧木机',4)v=f.Button1Down:Connect(function(B)local G=f.Target;if G then log=G.Parent;if log:FindFirstChild('Owner')and log:FindFirstChild('WoodSection')and log.Parent.Name=='LogModels'then if tostring(log.Owner.Value)==tostring(b)or log.Owner.Value==nil then E=log;a.notify('Ancestor','树已选择',4)end end end;if G then sawmill=G.Parent;if sawmill.Name:find('Sawmill')then F=sawmill;a.notify('Ancestor','剧木机已选择',4)elseif sawmill.Parent.Name:find('Sawmill')or sawmill.Parent:FindFirstChild'BlockageAlert'then F=sawmill.Parent;a.notify('Ancestor','剧木机已选择',4)end end end)repeat wait()until F and E;a.notify('Ancestor','Modding Tree',4)if v then v:Disconnect()v=nil end;a.modWood(E,F)   
+    local Speed = 60
+
+	-- Gui to Lua
+	-- Version: 3.2
+	local HumanoidRP = game.Players.LocalPlayer.Character.HumanoidRootPart
+	-- Instances:
+
+	local ScreenGui = Instance.new("ScreenGui")
+	local W = Instance.new("TextButton")
+	local S = Instance.new("TextButton")
+	local A = Instance.new("TextButton")
+	local D = Instance.new("TextButton")
+	local Fly = Instance.new("TextButton")
+	local unfly = Instance.new("TextButton")
+	local StopFly = Instance.new("TextButton")
+
+	--Properties:
+
+	ScreenGui.Parent = game.CoreGui
+	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+	unfly.Name = "unfly"
+	unfly.Parent = ScreenGui
+	unfly.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	unfly.Position = UDim2.new(0.694387913, 0, 0.181818187, 0)
+	unfly.Size = UDim2.new(0, 72, 0, 50)
+	unfly.Font = Enum.Font.SourceSans
+	unfly.Text = "unfly"
+	unfly.TextColor3 = Color3.fromRGB(170, 0, 255)
+	unfly.TextScaled = true
+	unfly.TextSize = 14.000
+	unfly.TextWrapped = 
+		unfly.MouseButton1Down:Connect(function()
+		HumanoidRP:FindFirstChildOfClass("BodyVelocity"):Destroy()
+		HumanoidRP:FindFirstChildOfClass("BodyGyro"):Destroy()
+	end)
+
+	StopFly.Name = "Stop Fly"
+	StopFly.Parent = ScreenGui
+	StopFly.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	StopFly.Position = UDim2.new(0.695689976, 0, 0.0213903747, 0)
+	StopFly.Size = UDim2.new(0, 71, 0, 50)
+	StopFly.Font = Enum.Font.SourceSans
+	StopFly.Text = "Stop fly"
+	StopFly.TextColor3 = Color3.fromRGB(170, 0, 255)
+	StopFly.TextScaled = true
+	StopFly.TextSize = 14.000
+	StopFly.TextWrapped = true
+	StopFly.MouseButton1Down:Connect(function()
+		HumanoidRP.Anchored = true
+	end)
+
+	Fly.Name = "Fly"
+	Fly.Parent = ScreenGui
+	Fly.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	Fly.Position = UDim2.new(0.588797748, 0, 0.0213903747, 0)
+	Fly.Size = UDim2.new(0, 66, 0, 50)
+	Fly.Font = Enum.Font.SourceSans
+	Fly.Text = "Fly"
+	Fly.TextColor3 = Color3.fromRGB(170, 0, 127)
+	Fly.TextScaled = true
+	Fly.TextSize = 14.000
+	Fly.TextWrapped = true
+	Fly.MouseButton1Down:Connect(function()
+		local BV = Instance.new("BodyVelocity",HumanoidRP)
+		local BG = Instance.new("BodyGyro",HumanoidRP)
+		BG.MaxTorque = Vector3.new(math.huge,math.huge,math.huge)
+		BG.D = 5000
+		BG.P = 50000
+		BG.CFrame = game.Workspace.CurrentCamera.CFrame
+		BV.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+	end)
+
+	W.Name = "W"
+	W.Parent = ScreenGui
+	W.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	W.Position = UDim2.new(0.161668837, 0, 0.601604283, 0)
+	W.Size = UDim2.new(0, 58, 0, 50)
+	W.Font = Enum.Font.SourceSans
+	W.Text = "↑"
+	W.TextColor3 = Color3.fromRGB(226, 226, 226)
+	W.TextScaled = true
+	W.TextSize = 5.000
+	W.TextWrapped = true
+	W.MouseButton1Down:Connect(function()
+		HumanoidRP.Anchored = false
+		HumanoidRP:FindFirstChildOfClass("BodyVelocity"):Destroy()
+		HumanoidRP:FindFirstChildOfClass("BodyGyro"):Destroy()
+		wait(.1)
+		local BV = Instance.new("BodyVelocity",HumanoidRP)
+		local BG = Instance.new("BodyGyro",HumanoidRP)
+		BG.MaxTorque = Vector3.new(math.huge,math.huge,math.huge)
+		BG.D = 5000
+		BG.P = 50000
+		BG.CFrame = game.Workspace.CurrentCamera.CFrame
+		BV.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+		BV.Velocity = game.Workspace.CurrentCamera.CFrame.LookVector * Speed
+	end)
+
+
+	S.Name = "S"
+	S.Parent = ScreenGui
+	S.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	S.Position = UDim2.new(0.161668837, 0, 0.735294104, 0)
+	S.Size = UDim2.new(0, 58, 0, 50)
+	S.Font = Enum.Font.SourceSans
+	S.Text = "↓"
+	S.TextColor3 = Color3.fromRGB(255, 255, 255)
+	S.TextScaled = true
+	S.TextSize = 14.000
+	S.TextWrapped = true
+	S.MouseButton1Down:Connect(function()
+		HumanoidRP.Anchored = false
+		HumanoidRP:FindFirstChildOfClass("BodyVelocity"):Destroy()
+		HumanoidRP:FindFirstChildOfClass("BodyGyro"):Destroy()
+		wait(.1)
+		local BV = Instance.new("BodyVelocity",HumanoidRP)
+		local BG = Instance.new("BodyGyro",HumanoidRP)
+		BG.MaxTorque = Vector3.new(math.huge,math.huge,math.huge)
+		BG.D = 5000
+		BG.P = 50000
+		BG.CFrame = game.Workspace.CurrentCamera.CFrame
+		BV.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+		BV.Velocity = game.Workspace.CurrentCamera.CFrame.LookVector * -Speed
+	end)
  end)
 
 
