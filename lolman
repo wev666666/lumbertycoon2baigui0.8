@@ -417,19 +417,7 @@ A8.Text = "自动砍树"
 A8.TextColor3 = Color3.fromRGB(0, 0, 0)
 A8.TextSize = 14.000
 A8.MouseButton1Down:Connect(function()
-    local function SendNotification(Title,Text,Duration) 
-        game.StarterGui:SetCore("SendNotification", {
-            Title = Title;
-            Text = Text;
-            Icon = nil;
-            Duration = Duration
-        })
-    end
-    SendNotification("自动砍树", "请你不要把斧头拿在手里去使用砍树", 10)
-    
-
-
-    local kangshu = Instance.new("ScreenGui")
+ local kangshu = Instance.new("ScreenGui")
     local Main = Instance.new("Frame")
     local biaoti = Instance.new("TextLabel")
     local close = Instance.new("TextButton")
@@ -800,6 +788,19 @@ A8.MouseButton1Down:Connect(function()
     TextButton_15.MouseButton1Click:Connect(function()
         MIXI:BringTree('LoneCave')
     end)
+    local function SendNotification(Title,Text,Duration) 
+        game.StarterGui:SetCore("SendNotification", {
+            Title = Title;
+            Text = Text;
+            Icon = nil;
+            Duration = Duration
+        })
+    end
+    SendNotification("自动砍树", "请你不要把斧头拿在手里去使用砍树", 10)
+    
+
+
+   
 end)
 
 A9.Name = "A9"
