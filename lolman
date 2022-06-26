@@ -2623,6 +2623,7 @@ D10.Text = "防踢"
 D10.TextColor3 = Color3.fromRGB(0, 0, 0)
 D10.TextSize = 14.000
 D10.MouseButton1Down:Connect(function()
+     SendNotification("防踢", "防踢已开启", 1)
     local requirements={
         ConfigSetup={
     };
@@ -2725,7 +2726,7 @@ D10.MouseButton1Down:Connect(function()
         end);
         hookfunction(requirements.LP.Kick,protect(function() wait(9e9) end));
     ]])(functions,requirements)
-        SendNotification("防踢", "防踢已开启", 1)
+   
    end)
 
 D11.Name = "D11"
