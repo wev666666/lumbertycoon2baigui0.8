@@ -81,7 +81,7 @@ local F2 = Instance.new("TextButton")
 local F3 = Instance.new("TextButton")
 local F4 = Instance.new("TextButton")
 
-local gs = function(service) return game:GetService(service) end gs("Workspace").Stores.WoodRUs.Parts.PREMIUMSELECTION.SurfaceGui.TextLabel.Text= "白V0.9";
+local gs = function(service) return game:GetService(service) end gs("Workspace").Stores.WoodRUs.Parts.PREMIUMSELECTION.SurfaceGui.TextLabel.Text= "白V1";
 local gs = function(service) return game:GetService(service) end gs("Workspace").Stores.WoodRUs.Parts.SELLWOOD.SurfaceGui.TextLabel.Text= "作者，";
 
 
@@ -104,7 +104,7 @@ ID.BackgroundTransparency = 1.000
 ID.BorderSizePixel = 0
 ID.Size = UDim2.new(0.4693878, 0, 1, 0)
 ID.Font = Enum.Font.SourceSansSemibold
-ID.Text = "白 V0.9"
+ID.Text = "白 V1"
 ID.TextColor3 = Color3.fromRGB(255, 255, 255)
 ID.TextSize = 20.000
 
@@ -417,7 +417,19 @@ A8.Text = "自动砍树"
 A8.TextColor3 = Color3.fromRGB(0, 0, 0)
 A8.TextSize = 14.000
 A8.MouseButton1Down:Connect(function()
- local kangshu = Instance.new("ScreenGui")
+    local function SendNotification(Title,Text,Duration) 
+        game.StarterGui:SetCore("SendNotification", {
+            Title = Title;
+            Text = Text;
+            Icon = nil;
+            Duration = Duration
+        })
+    end
+    SendNotification("自动砍树", "请你不要把斧头拿在手里去使用砍树", 10)
+    
+
+
+    local kangshu = Instance.new("ScreenGui")
     local Main = Instance.new("Frame")
     local biaoti = Instance.new("TextLabel")
     local close = Instance.new("TextButton")
@@ -788,8 +800,6 @@ A8.MouseButton1Down:Connect(function()
     TextButton_15.MouseButton1Click:Connect(function()
         MIXI:BringTree('LoneCave')
     end)
-
-   
 end)
 
 A9.Name = "A9"
@@ -2001,45 +2011,48 @@ D4.MouseButton1Down:Connect(function()
     plank.TextSize = 14.000
     plank.Text="传送木板"
     plank.MouseButton1Click:connect(function()
-        local plr = StealText.Text
-        local StealType = "TreeClass"
-    
-        local Times = 0
-        for i,v in pairs(game.Workspace.PlayerModels:GetChildren()) do
-            if v:FindFirstChild("Owner") and tostring(v.Owner.Value) == plr then
-                if StealType ~= "TreeClass" then
-                    if v:FindFirstChild("Type") and tostring(v.Type.Value) == StealType then
-                        if v.PrimaryPart then
-                            v.PrimaryPart.CFrame = CFrame.new(LocationX, LocationY, LocationZ)
-                            game.ReplicatedStorage.Interaction.ClientRequestOwnership:FireServer(v.PrimaryPart)
-                            v.PrimaryPart.CFrame = CFrame.new(LocationX, LocationY, LocationZ)
-                            game.ReplicatedStorage.Interaction.ClientIsDragging:FireServer(v.PrimaryPart)
-                            v.PrimaryPart.CFrame = CFrame.new(LocationX, LocationY, LocationZ)
-                            Times = Times + 1
-                            if Times == 10 then
-                                Times = 0
-                                wait(0.1)
-                            end
-                        end
-                    end
-                else
-                    if v:FindFirstChild("TreeClass") then
-                        if v.WoodSection then
-                            v.WoodSection.CFrame = CFrame.new(LocationX, LocationY, LocationZ)
-                            game.ReplicatedStorage.Interaction.ClientRequestOwnership:FireServer(v.WoodSection)
-                            v.WoodSection.CFrame = CFrame.new(LocationX, LocationY, LocationZ)
-                            game.ReplicatedStorage.Interaction.ClientIsDragging:FireServer(v.WoodSection)
-                            v.WoodSection.CFrame = CFrame.new(LocationX, LocationY, LocationZ)
-                            Times = Times + 1
-                            if Times == 10 then
-                                Times = 0
-                                wait(0.1)
-                            end
-                        end
-                    end
-                end
-            end
+        local Pos =  game:service'Players'.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
+        local function tp(cf)
+            repeat wait()until game:GetService('Players').LocalPlayer.Character:FindFirstChild('HumanoidRootPart');
+            if game:GetService('Players').LocalPlayer.Character.Humanoid.Sit then 
+                game:GetService('Players').LocalPlayer.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(cf*CFrame.Angles(math.rad(game:GetService('Players').LocalPlayer.Character.Humanoid.SeatPart.Parent.PrimaryPart.Orientation.X), math.rad(game:GetService('Players').LocalPlayer.Character.Humanoid.SeatPart.Parent.PrimaryPart.Orientation.Y), math.rad(game:GetService('Players').LocalPlayer.Character.Humanoid.SeatPart.Parent.PrimaryPart.Orientation.Z)));
+            elseif not game:GetService('Players').LocalPlayer.Character.Humanoid.Sit then 
+                game:GetService('Players').LocalPlayer.Character:SetPrimaryPartCFrame(cf)
+            end;
+        end;
+        local function getPlanks()
+        local plankList={};
+            for _,plank in next,game:GetService('Workspace').PlayerModels:children()do 
+                if  plank:FindFirstChild('WoodSection')and plank:FindFirstChild('Owner')and plank.Owner.Value==game:GetService('Players').LocalPlayer and not table.find(plankList,plank)then 
+                    table.insert(plankList,plank)
+                end;
+            end;
+            return plankList;
         end
+        
+            local logFolder=getPlanks();
+            local oldPos=game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.CFrame;
+            for _,log in next,logFolder do 
+                if log:FindFirstChild('WoodSection')then 
+                    if (game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.CFrame.p-log.WoodSection.CFrame.p).magnitude>40 then
+                        tp(CFrame.new(log.WoodSection.CFrame.p+Vector3.new(2,0,2)));
+                    end;
+                    spawn(function()
+                        for i=1,20 do
+                            game:GetService('ReplicatedStorage').Interaction.ClientRequestOwnership:FireServer(log);
+                            game:GetService('ReplicatedStorage').Interaction.ClientIsDragging:FireServer(log);
+                            wait();
+                        end;
+                    end)
+                    wait(0.18)
+                    if not log.PrimaryPart then
+                        log.PrimaryPart=log.WoodSection;
+                    end;
+                    log:SetPrimaryPartCFrame(CFrame.new(LocationX, LocationY, LocationZ));
+                end;
+            end; 
+            tp(LocationX, LocationY, LocationZ);
+        
     end)
     
     liwu.Name = "liwu"
@@ -2606,10 +2619,12 @@ D9.Text = "所有蓝图"
 D9.TextColor3 = Color3.fromRGB(0, 0, 0)
 D9.TextSize = 14.000
 D9.MouseButton1Down:Connect(function()
-    for i,v in pairs(game.ReplicatedStorage.Purchasables.Structures.BlueprintStructures:GetChildren()) do
-        local clone = v:Clone()
-        clone.Parent = game.Players.LocalPlayer.PlayerBlueprints.Blueprints
+    local playerBlueprints = game:GetService('Players').LocalPlayer.PlayerBlueprints.Blueprints
+    for _, v in next, game:GetService('ReplicatedStorage').ClientItemInfo:GetChildren() do
+        if v:FindFirstChild('WoodCost') and not playerBlueprints:FindFirstChild(v.Name) then
+            v:Clone().Parent = playerBlueprints
         end
+    end
    end)
 
 D10.Name = "D10"
@@ -2623,7 +2638,6 @@ D10.Text = "防踢"
 D10.TextColor3 = Color3.fromRGB(0, 0, 0)
 D10.TextSize = 14.000
 D10.MouseButton1Down:Connect(function()
-     SendNotification("防踢", "防踢已开启", 1)
     local requirements={
         ConfigSetup={
     };
@@ -2726,7 +2740,7 @@ D10.MouseButton1Down:Connect(function()
         end);
         hookfunction(requirements.LP.Kick,protect(function() wait(9e9) end));
     ]])(functions,requirements)
-   
+        SendNotification("防踢", "防踢已开启", 1)
    end)
 
 D11.Name = "D11"
