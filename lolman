@@ -1928,6 +1928,7 @@ D4.MouseButton1Down:Connect(function()
     end)
     
     
+
     biaoti.Name = "biaoti"
     biaoti.Parent = Main
     biaoti.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -3163,9 +3164,56 @@ E8.BorderSizePixel = 0
 E8.Position = UDim2.new(0.337719291, 0, 0.239631295, 0)
 E8.Size = UDim2.new(0.320175439, 0, 0.152073696, 0)
 E8.Font = Enum.Font.SourceSans
-E8.Text = "祖拖"
+E8.Text = "传送木头"
 E8.TextColor3 = Color3.fromRGB(0, 0, 0)
 E8.TextSize = 14.000
+E8.MouseButton1Down:Connect(function()
+
+local Pos =  game:service'Players'.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
+local function tp(cf)
+    repeat wait()until game:GetService('Players').LocalPlayer.Character:FindFirstChild('HumanoidRootPart');
+    if game:GetService('Players').LocalPlayer.Character.Humanoid.Sit then 
+        game:GetService('Players').LocalPlayer.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(cf*CFrame.Angles(math.rad(game:GetService('Players').LocalPlayer.Character.Humanoid.SeatPart.Parent.PrimaryPart.Orientation.X), math.rad(game:GetService('Players').LocalPlayer.Character.Humanoid.SeatPart.Parent.PrimaryPart.Orientation.Y), math.rad(game:GetService('Players').LocalPlayer.Character.Humanoid.SeatPart.Parent.PrimaryPart.Orientation.Z)));
+    elseif not game:GetService('Players').LocalPlayer.Character.Humanoid.Sit then 
+        game:GetService('Players').LocalPlayer.Character:SetPrimaryPartCFrame(cf)
+    end;
+end;
+local function getLogs()
+    local logList={};
+    for _,log in next,game:GetService('Workspace').LogModels:children()do 
+        if log:FindFirstChild('Owner')and log.Owner.Value==game:GetService('Players').LocalPlayer and not table.find(logList,log)then 
+            table.insert(logList,log)
+        end;
+    end;
+    return logList;
+end;
+
+
+local logFolder=getLogs();
+local oldPos=game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.CFrame;
+for _,log in next,logFolder do 
+    if log:FindFirstChild('WoodSection')then 
+        if (game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.CFrame.p-log.WoodSection.CFrame.p).magnitude>40 then
+           tp(CFrame.new(log.WoodSection.CFrame.p+Vector3.new(2,0,2)));
+        end;
+        spawn(function()
+            for i=1,20 do
+                game:GetService('ReplicatedStorage').Interaction.ClientRequestOwnership:FireServer(log);
+                game:GetService('ReplicatedStorage').Interaction.ClientIsDragging:FireServer(log);
+                wait();
+            end;
+        end)
+        wait(0.18)
+        if not log.PrimaryPart then
+            log.PrimaryPart=log.WoodSection;
+        end;
+        log:SetPrimaryPartCFrame(CFrame.new(oldPos.p));
+    end;
+end; 
+tp(oldPos);
+
+    end)
+
 
 E9.Name = "E9"
 E9.Parent = EF
